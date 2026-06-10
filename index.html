@@ -2,356 +2,211 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Exa-Tech | Miner Control â Bajo del Toro</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Exa-Tech | Miner Control — Bajo del Toro</title>
 <style>
-  :root {
-    --bg: #060810;
-    --surface: #0c1020;
-    --border: #1a2240;
-    --accent: #0077ff;
-    --accent2: #7c3aed;
-    --ok: #22c55e;
-    --warn: #f59e0b;
-    --error: #ef4444;
-    --text: #e2e8f0;
-    --muted: #4a6080;
-    --font: 'Segoe UI', system-ui, sans-serif;
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--bg); color:var(--text); font-family:var(--font); min-height:100vh; }
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;color:#e2e8f0;background:#04080f;overflow-x:hidden;}
 
-  /* TOP BAR */
-  header {
-    display:flex; align-items:center; justify-content:space-between;
-    padding:0 32px; height:60px;
-    background:var(--surface); border-bottom:1px solid var(--border);
-    position:sticky; top:0; z-index:100;
-  }
-  .logo { display:flex; align-items:center; gap:10px; font-weight:700; font-size:1.1rem; letter-spacing:.05em; }
-  .logo-dot { width:10px; height:10px; border-radius:50%; background:var(--accent); box-shadow:0 0 8px var(--accent); }
-  .site-tag { color:var(--muted); font-size:.85rem; }
-  .live-badge {
-    display:flex; align-items:center; gap:6px;
-    background:rgba(34,197,94,.1); border:1px solid rgba(34,197,94,.3);
-    color:var(--ok); padding:4px 12px; border-radius:20px; font-size:.8rem;
-  }
-  .live-dot { width:7px; height:7px; border-radius:50%; background:var(--ok); animation:pulse 1.5s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+/* FONDO ATMOSFERICO */
+body::before{content:'';position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 60% at 15% 50%, #0a1e3d 0%, transparent 70%),
+    radial-gradient(ellipse 60% 70% at 85% 60%, #1a0c04 0%, transparent 65%),
+    radial-gradient(ellipse 40% 40% at 75% 80%, #2a1200 0%, transparent 60%),
+    linear-gradient(160deg, #030c1a 0%, #060810 40%, #0a0600 70%, #04080f 100%);
+}
+/* Líneas de servidor (izquierda) */
+body::after{content:'';position:fixed;inset:0;z-index:0;
+  background:
+    repeating-linear-gradient(90deg,transparent,transparent 80px,rgba(0,119,255,0.015) 80px,rgba(0,119,255,0.015) 81px),
+    repeating-linear-gradient(0deg,transparent,transparent 60px,rgba(0,119,255,0.01) 60px,rgba(0,119,255,0.01) 61px);
+}
 
-  /* MAIN */
-  main { padding:32px; max-width:1400px; margin:0 auto; }
+/* CONTENIDO */
+header,main,footer{position:relative;z-index:1;}
 
-  /* SUMMARY CARDS */
-  .summary { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:36px; }
-  .stat-card {
-    background:var(--surface); border:1px solid var(--border);
-    border-radius:12px; padding:20px 24px;
-  }
-  .stat-label { font-size:.75rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin-bottom:8px; }
-  .stat-value { font-size:2rem; font-weight:700; }
-  .stat-value.ok { color:var(--ok); }
-  .stat-value.error { color:var(--error); }
-  .stat-value.warn { color:var(--warn); }
-  .stat-value.accent { color:var(--accent); }
-  .stat-sub { font-size:.8rem; color:var(--muted); margin-top:4px; }
+/* HEADER */
+header{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:64px;
+  background:rgba(4,8,15,0.75);
+  border-bottom:1px solid rgba(0,119,255,0.25);
+  backdrop-filter:blur(12px);}
+.logo{display:flex;align-items:center;gap:12px;font-weight:700;font-size:1.15rem;letter-spacing:.05em;}
+.logo-icon{width:36px;height:36px;display:flex;align-items:center;justify-content:center;}
+.logo-icon svg{width:34px;height:34px;}
+.logo-name{color:#fff;}
+.logo-sep{color:rgba(255,255,255,0.3);font-weight:300;margin:0 4px;}
+.logo-site{color:rgba(255,255,255,0.5);font-weight:400;font-size:.95rem;}
+.live-badge{display:flex;align-items:center;gap:7px;
+  background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.35);
+  color:#22c55e;padding:5px 14px;border-radius:20px;font-size:.82rem;font-weight:600;}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-  /* SECTION TITLE */
-  .section-title {
-    font-size:.7rem; text-transform:uppercase; letter-spacing:.15em;
-    color:var(--muted); margin-bottom:16px; padding-bottom:8px;
-    border-bottom:1px solid var(--border);
-  }
+/* MAIN */
+main{padding:32px;max-width:1400px;margin:0 auto;}
 
-  /* DTC GRID */
-  .dtc-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
-  .dtc-card {
-    background:var(--surface); border:1px solid var(--border);
-    border-radius:14px; padding:22px; cursor:pointer;
-    transition:border-color .2s, transform .15s;
-    text-decoration:none; color:inherit; display:block;
-  }
-  .dtc-card:hover { border-color:var(--accent); transform:translateY(-2px); }
-  .dtc-card.has-failures { border-color:rgba(239,68,68,.4); }
-  .dtc-card.has-failures:hover { border-color:var(--error); }
+/* WATERMARK */
+.watermark{position:fixed;bottom:20%;left:50%;transform:translateX(-50%);z-index:0;
+  text-align:center;pointer-events:none;opacity:.04;}
+.watermark-logo{font-size:3rem;font-weight:900;letter-spacing:.3em;color:#fff;line-height:1;}
+.watermark-sub{font-size:.9rem;letter-spacing:.4em;color:#fff;margin-top:4px;}
 
-  .dtc-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; }
-  .dtc-name { font-size:1.1rem; font-weight:700; }
-  .dtc-id { font-size:.7rem; color:var(--muted); margin-top:2px; font-family:monospace; }
-  .fail-badge {
-    background:rgba(239,68,68,.15); border:1px solid rgba(239,68,68,.4);
-    color:var(--error); padding:3px 10px; border-radius:20px;
-    font-size:.75rem; font-weight:600; white-space:nowrap;
-  }
-  .ok-badge {
-    background:rgba(34,197,94,.1); border:1px solid rgba(34,197,94,.3);
-    color:var(--ok); padding:3px 10px; border-radius:20px;
-    font-size:.75rem; font-weight:600;
-  }
+/* STAT CARDS */
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:36px;}
+.stat-card{
+  background:rgba(6,14,28,0.6);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:14px;padding:22px 24px;
+  backdrop-filter:blur(16px);
+  position:relative;overflow:hidden;
+}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:rgba(0,119,255,0.4);}
+.stat-card.warn::before{background:rgba(245,158,11,0.6);}
+.stat-card.danger::before{background:rgba(239,68,68,0.6);}
+.stat-icon{position:absolute;top:18px;right:18px;opacity:.35;}
+.stat-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,0.4);margin-bottom:10px;}
+.stat-value{font-size:2.2rem;font-weight:800;line-height:1;}
+.stat-value.blue{color:#3399ff;}
+.stat-value.red{color:#ef4444;}
+.stat-value.orange{color:#f59e0b;}
+.stat-value.small{font-size:1.3rem;}
+.stat-sub{font-size:.78rem;color:rgba(255,255,255,0.35);margin-top:6px;}
 
-  .dtc-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
-  .mini-stat { background:var(--bg); border-radius:8px; padding:10px 12px; }
-  .mini-stat-label { font-size:.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; }
-  .mini-stat-val { font-size:1.1rem; font-weight:700; margin-top:2px; }
+/* SECTION */
+.section-title{font-size:.7rem;text-transform:uppercase;letter-spacing:.18em;
+  color:rgba(0,150,255,0.7);margin-bottom:18px;padding-bottom:10px;
+  border-bottom:1px solid rgba(0,119,255,0.2);display:flex;align-items:center;gap:8px;}
+.section-title::before{content:'';width:3px;height:14px;background:#0077ff;border-radius:2px;}
 
-  .dtc-footer { margin-top:14px; padding-top:12px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
-  .dtc-layout { font-size:.75rem; color:var(--muted); }
-  .dtc-link { font-size:.75rem; color:var(--accent); font-weight:600; }
+/* DTC GRID */
+.dtc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.dtc-card{
+  background:rgba(6,14,28,0.55);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:16px;padding:22px;cursor:pointer;
+  text-decoration:none;color:inherit;display:block;
+  backdrop-filter:blur(14px);
+  transition:border-color .2s,transform .15s;
+}
+.dtc-card:hover{border-color:rgba(0,119,255,0.4);transform:translateY(-2px);}
+.dtc-card.fail{border-color:rgba(239,68,68,0.25);}
+.dtc-card.fail:hover{border-color:rgba(239,68,68,0.5);}
+.dtc-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;}
+.dtc-name{font-size:1.2rem;font-weight:800;color:#fff;}
+.dtc-id{font-size:.68rem;color:rgba(255,255,255,0.3);margin-top:2px;font-family:monospace;}
+.fail-badge{background:rgba(239,68,68,0.18);border:1px solid rgba(239,68,68,0.4);
+  color:#ef4444;padding:4px 11px;border-radius:20px;font-size:.75rem;font-weight:700;}
+.dtc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.mini-stat{background:rgba(0,0,0,0.3);border-radius:8px;padding:10px 12px;border:1px solid rgba(255,255,255,0.04);}
+.mini-lbl{font-size:.64rem;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.07em;}
+.mini-val{font-size:1.1rem;font-weight:700;margin-top:2px;}
+.dtc-footer{margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);
+  display:flex;justify-content:space-between;align-items:center;}
+.dtc-layout{font-size:.73rem;color:rgba(255,255,255,0.3);display:flex;align-items:center;gap:5px;}
+.dtc-link{font-size:.76rem;color:#3399ff;font-weight:600;display:flex;align-items:center;gap:4px;}
 
-  /* ERROR BREAKDOWN */
-  .error-table-wrap { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:22px; margin-top:36px; }
-  table { width:100%; border-collapse:collapse; }
-  th { text-align:left; font-size:.7rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); padding:8px 12px; border-bottom:1px solid var(--border); }
-  td { padding:12px; font-size:.85rem; border-bottom:1px solid rgba(34,40,64,.5); }
-  tr:last-child td { border-bottom:none; }
-  tr:hover td { background:rgba(255,255,255,.02); }
-  .tag { display:inline-block; padding:2px 8px; border-radius:4px; font-size:.75rem; font-weight:600; }
-  .tag-error { background:rgba(239,68,68,.15); color:var(--error); }
-  .tag-warn { background:rgba(245,158,11,.15); color:var(--warn); }
-  .tag-ok { background:rgba(34,197,94,.1); color:var(--ok); }
-  .mono { font-family:monospace; font-size:.8rem; color:var(--muted); }
+/* ERROR TABLE */
+.error-wrap{background:rgba(6,14,28,0.55);border:1px solid rgba(255,255,255,0.07);
+  border-radius:16px;padding:24px;margin-top:36px;backdrop-filter:blur(14px);}
+table{width:100%;border-collapse:collapse;}
+th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;
+  color:rgba(255,255,255,0.35);padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.07);}
+td{padding:12px;font-size:.84rem;border-bottom:1px solid rgba(255,255,255,0.04);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(255,255,255,0.02);}
+.tag{display:inline-block;padding:3px 10px;border-radius:6px;font-size:.74rem;font-weight:700;}
+.tag-e{background:rgba(239,68,68,0.18);color:#ef4444;border:1px solid rgba(239,68,68,0.3);}
+.tag-w{background:rgba(245,158,11,0.15);color:#f59e0b;border:1px solid rgba(245,158,11,0.3);}
+.mono{font-family:monospace;font-size:.78rem;color:rgba(255,255,255,0.4);}
+footer{text-align:center;padding:28px;color:rgba(255,255,255,0.2);font-size:.78rem;
+  border-top:1px solid rgba(255,255,255,0.05);margin-top:48px;position:relative;z-index:1;}
 
-  footer { text-align:center; padding:32px; color:var(--muted); font-size:.8rem; border-top:1px solid var(--border); margin-top:48px; }
-
-  @media(max-width:900px){
-    .dtc-grid { grid-template-columns:1fr 1fr; }
-    .summary { grid-template-columns:1fr 1fr; }
-  }
-  @media(max-width:580px){
-    .dtc-grid { grid-template-columns:1fr; }
-    .summary { grid-template-columns:1fr 1fr; }
-    main { padding:16px; }
-  }
+/* RESPONSIVE */
+@media(max-width:900px){.dtc-grid{grid-template-columns:1fr 1fr;}.summary{grid-template-columns:1fr 1fr;}}
+@media(max-width:580px){.dtc-grid{grid-template-columns:1fr;}.summary{grid-template-columns:1fr 1fr;}main{padding:16px;}}
 </style>
 </head>
 <body>
 
+<!-- WATERMARK -->
+<div class="watermark">
+  <div class="watermark-logo">EXA-TECH</div>
+  <div class="watermark-sub">INDUSTRIA 4.0 · MINING SOLUTIONS</div>
+</div>
+
 <header>
   <div class="logo">
-    <div class="logo-dot"></div>
-    EXA-TECH
-    <span class="site-tag">/ Bajo del Toro</span>
+    <div class="logo-icon">
+      <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="17,2 30,9.5 30,24.5 17,32 4,24.5 4,9.5" fill="rgba(0,119,255,0.15)" stroke="#0077ff" stroke-width="1.5"/>
+        <polygon points="17,7 26,12.5 26,23.5 17,29 8,23.5 8,12.5" fill="rgba(0,119,255,0.1)" stroke="#0099ff" stroke-width="1"/>
+        <circle cx="17" cy="17" r="4" fill="#0077ff" opacity="0.9"/>
+        <circle cx="17" cy="17" r="6" fill="none" stroke="#0077ff" stroke-width="0.8" opacity="0.5"/>
+      </svg>
+    </div>
+    <span class="logo-name">EXA-TECH</span>
+    <span class="logo-sep">/</span>
+    <span class="logo-site">Bajo del Toro</span>
   </div>
-  <div class="live-badge">
-    <div class="live-dot"></div>
-    EN VIVO
-  </div>
+  <div class="live-badge"><div class="live-dot"></div>EN VIVO</div>
 </header>
 
 <main>
-
-  <!-- SUMMARY -->
   <div class="summary">
     <div class="stat-card">
+      <div class="stat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3399ff" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
       <div class="stat-label">Total DTCs</div>
-      <div class="stat-value accent">9</div>
+      <div class="stat-value blue">9</div>
       <div class="stat-sub">Bajo del Toro</div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card danger">
+      <div class="stat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
       <div class="stat-label">Miners en Falla</div>
-      <div class="stat-value error">36</div>
-      <div class="stat-sub">Requieren atenciÃ³n</div>
+      <div class="stat-value red">36</div>
+      <div class="stat-sub">Requieren atención</div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card warn">
+      <div class="stat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
       <div class="stat-label">DTCs Afectados</div>
-      <div class="stat-value warn">9 / 9</div>
+      <div class="stat-value orange">9 / 9</div>
       <div class="stat-sub">Con al menos 1 falla</div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card danger">
+      <div class="stat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
       <div class="stat-label">Error Predominante</div>
-      <div class="stat-value" style="font-size:1.4rem; color:var(--error)">1005</div>
+      <div class="stat-value red small">1005</div>
       <div class="stat-sub">Miner initialization failed</div>
     </div>
   </div>
 
-  <!-- DTC GRID -->
   <div class="section-title">Data Centers</div>
   <div class="dtc-grid">
-
-    <a href="dc1.html" class="dtc-card has-failures">
-      <div class="dtc-header">
-        <div><div class="dtc-name">DC1</div><div class="dtc-id">69a85e71...2411b1</div></div>
-        <span class="fail-badge">3 fallas</span>
-      </div>
-      <div class="dtc-stats">
-        <div class="mini-stat"><div class="mini-stat-label">Miners</div><div class="mini-stat-val">320</div></div>
-        <div class="mini-stat"><div class="mini-stat-label">En falla</div><div class="mini-stat-val" style="color:var(--error)">3</div></div>
-        <div class="mini-stat"><div class="mini-stat-label">Error</div><div class="mini-stat-val" style="color:var(--warn)">1005</div></div>
-      </div>
-      <div class="dtc-footer"><span class="dtc-layout">28 estantes Ã 12 slots</span><span class="dtc-link">Ver reporte â</span></div>
-    </a>
-
-    <a href="dc2.html" class="dtc-card has-failures">
-      <div class="dtc-header">
-        <div><div class="dtc-name">DC2</div><div class="dtc-id">69a99e88...44fc</div></div>
-        <span class="fail-badge">5 fallas</span>
-      </div>
-      <div class="dtc-stats">
-        <div class="mini-stat"><div class="mini-stat-label">Miners</div><div class="mini-stat-val">320</div></div>
-        <div class="mini-stat"><div class="mini-stat-label">En falla</div><div class="mini-stat-val" style="color:var(--error)">5</div></div>
-        <div class="mini-stat"><div class="mini-stat-label">Errores</div><div class="mini-stat-val" style="color:var(--warn)">1005+</div></div>
-      </div>
-      <div class="dtc-footer"><span class="dtc-layout">28 estantes Ã 12 slots</span><span class="dtc-link">Ver reporte â</span></div>
-    </a>
-
-    <a href="dc3.html" class="dtc-card has-failures">
-      <div class="dtc-header">
-        <div><div class="dtc-name">DC3</div><div class="dtc-id">69a99e92...47c6</div></div>
-        <span class="fail-badge">8 fallas</span>
-      </div>
-      <div class="dtc-stats">
-        <div class="mini-stat"><div class="mini-stat-label">Miners</div><div class="mini-stat-val">320</div></div>
-        <div class="mini-stat"><div class="mini-stat-label">En falla</div><div class="mini-stat-val" style="color:var(--error)">8</div></div>
-        <div class="mini-stat"><div class="mini-stat-label">Errores</div><div class="mini-stat-val" style="color:var(--warn)">Multi</div></div>
-      </div>
-      <div class="dtc-footer"><span class="dtc-layout">28 estantes Ã 12 slots</span><span class="dtc-link">Ver reporte â</span></div>
-    </a>
-
-    <a href="dc4.html" class="dtc-card has-failures">
-      <div class="dtc-header">
-        <div><div class="dtc-name">DC4</div><div class="dtc-id">69ab1425...9dfe</div></div>
-        <span class="fail-badge">2 fallas</span>
-      </div>
-      <div class="dtc-stats">
-        <div class="mini-stat"><div class="mini-stat-label">Miners</div><div class="mini-stat-val">320</div></div>
-        <div class="mini-stat"><div class="mini-stat-label">En falla</div><div class="mini-stat-val" style="color:var(--error)">2</div></div>
-        <div class="mini-stat"><div class="mini-stat-label">Error</div><div class="mini-stat-val" style="color:var(--warn)">1005</div></div>
-      </div>
-      <div class="dtc-footer"><span class="dtc-layout">28 estantes Ã 12 slots</span><span class="dtc-link">Ver reporte â</span></div>
-    </a>
-
-    <a href="dc5.html" class="dtc-card has-failures">
-      <div class="dtc-header">
-        <div><div class="dtc-name">DC5</div><div class="dtc-id">69b3008b...0e60</div></div>
-        <span class="fail-badge">3 fallas</span>
-      </div>
-      <div class="dtc-stats">
-        <div class="mini-stat"><div class="mini-stat-label">Miners</div><div class="mini-stat-val">320</div></div>
-        <div class="mini-stat"><div class="mini-stat-label">En falla</div><div class="mini-stat-val" style="color:var(--error)">3</div></div>
-        <div class="mini-stat"><div class="mini-stat-label">Errores</div><div class="mini-stat-val" style="color:var(--warn)">1005+</div></div>
-      </div>
-      <div class="dtc-footer"><span class="dtc-layout">28 estantes Ã 12 slots</span><span class="dtc-link">Ver reporte â</span></div>
-    </a>
-
-    <a href="dc6.html" class="dtc-card has-failures">
-      <div class="dtc-header">
-        <div><div class="dtc-name">DC6</div><div class="dtc-id">69b30102...117b</div></div>
-        <span class="fail-badge">4 fallas</span>
-      </div>
-      <div class="dtc-stats">
-        <div class="mini-stat"><div class="mini-stat-label">Miners</div><div class="mini-stat-val">320</div></div>
-        <div class="mini-stat"><div class="mini-stat-label">En falla</div><div class="mini-stat-val" style="color:var(--error)">4</div></div>
-        <div class="mini-stat"><div class="mini-stat-label">Errores</div><div class="mini-stat-val" style="color:var(--warn)">Multi</div></div>
-      </div>
-      <div class="dtc-footer"><span class="dtc-layout">28 estantes Ã 12 slots</span><span class="dtc-link">Ver reporte â</span></div>
-    </a>
-
-    <a href="dc7.html" class="dtc-card has-failures">
-      <div class="dtc-header">
-        <div><div class="dtc-name">DC7</div><div class="dtc-id">69b31938...28b3</div></div>
-        <span class="fail-badge">3 fallas</span>
-      </div>
-      <div class="dtc-stats">
-        <div class="mini-stat"><div class="mini-stat-label">Miners</div><div class="mini-stat-val">320</div></div>
-        <div class="mini-stat"><div class="mini-stat-label">En falla</div><div class="mini-stat-val" style="color:var(--error)">3</div></div>
-        <div class="mini-stat"><div class="mini-stat-label">Errores</div><div class="mini-stat-val" style="color:var(--warn)">1005+</div></div>
-      </div>
-      <div class="dtc-footer"><span class="dtc-layout">28 estantes Ã 12 slots</span><span class="dtc-link">Ver reporte â</span></div>
-    </a>
-
-    <a href="dc8.html" class="dtc-card has-failures">
-      <div class="dtc-header">
-        <div><div class="dtc-name">DC8</div><div class="dtc-id">69b3211e...333a</div></div>
-        <span class="fail-badge">3 fallas</span>
-      </div>
-      <div class="dtc-stats">
-        <div class="mini-stat"><div class="mini-stat-label">Miners</div><div class="mini-stat-val">320</div></div>
-        <div class="mini-stat"><div class="mini-stat-label">En falla</div><div class="mini-stat-val" style="color:var(--error)">3</div></div>
-        <div class="mini-stat"><div class="mini-stat-label">Error</div><div class="mini-stat-val" style="color:var(--warn)">1005</div></div>
-      </div>
-      <div class="dtc-footer"><span class="dtc-layout">28 estantes Ã 12 slots</span><span class="dtc-link">Ver reporte â</span></div>
-    </a>
-
-    <a href="dc9.html" class="dtc-card has-failures">
-      <div class="dtc-header">
-        <div><div class="dtc-name">DC9</div><div class="dtc-id">69b3805d...c16f</div></div>
-        <span class="fail-badge">5 fallas</span>
-      </div>
-      <div class="dtc-stats">
-        <div class="mini-stat"><div class="mini-stat-label">Miners</div><div class="mini-stat-val">288</div></div>
-        <div class="mini-stat"><div class="mini-stat-label">En falla</div><div class="mini-stat-val" style="color:var(--error)">5</div></div>
-        <div class="mini-stat"><div class="mini-stat-label">Errores</div><div class="mini-stat-val" style="color:var(--warn)">Multi</div></div>
-      </div>
-      <div class="dtc-footer"><span class="dtc-layout">32 estantes Ã 9 slots</span><span class="dtc-link">Ver reporte â</span></div>
-    </a>
-
+    <a href="dc1.html" class="dtc-card fail"><div class="dtc-header"><div><div class="dtc-name">DC1</div><div class="dtc-id">69a85e71...2411b1</div></div><span class="fail-badge">3 fallas</span></div><div class="dtc-stats"><div class="mini-stat"><div class="mini-lbl">Miners</div><div class="mini-val">320</div></div><div class="mini-stat"><div class="mini-lbl">En falla</div><div class="mini-val" style="color:#ef4444">3</div></div><div class="mini-stat"><div class="mini-lbl">Error</div><div class="mini-val" style="color:#f59e0b">1005</div></div></div><div class="dtc-footer"><span class="dtc-layout"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 7h10M7 12h10M7 17h10"/></svg>28 × 12 slots</span><span class="dtc-link">Ver reporte <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></a>
+    <a href="dc2.html" class="dtc-card fail"><div class="dtc-header"><div><div class="dtc-name">DC2</div><div class="dtc-id">69a99e88...44fc</div></div><span class="fail-badge">5 fallas</span></div><div class="dtc-stats"><div class="mini-stat"><div class="mini-lbl">Miners</div><div class="mini-val">320</div></div><div class="mini-stat"><div class="mini-lbl">En falla</div><div class="mini-val" style="color:#ef4444">5</div></div><div class="mini-stat"><div class="mini-lbl">Errores</div><div class="mini-val" style="color:#f59e0b">Multi</div></div></div><div class="dtc-footer"><span class="dtc-layout"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 7h10M7 12h10M7 17h10"/></svg>28 × 12 slots</span><span class="dtc-link">Ver reporte <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></a>
+    <a href="dc3.html" class="dtc-card fail"><div class="dtc-header"><div><div class="dtc-name">DC3</div><div class="dtc-id">69a99e92...47c6</div></div><span class="fail-badge">8 fallas</span></div><div class="dtc-stats"><div class="mini-stat"><div class="mini-lbl">Miners</div><div class="mini-val">320</div></div><div class="mini-stat"><div class="mini-lbl">En falla</div><div class="mini-val" style="color:#ef4444">8</div></div><div class="mini-stat"><div class="mini-lbl">Errores</div><div class="mini-val" style="color:#f59e0b">Multi</div></div></div><div class="dtc-footer"><span class="dtc-layout"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 7h10M7 12h10M7 17h10"/></svg>28 × 12 slots</span><span class="dtc-link">Ver reporte <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></a>
+    <a href="dc4.html" class="dtc-card fail"><div class="dtc-header"><div><div class="dtc-name">DC4</div><div class="dtc-id">69ab1425...9dfe</div></div><span class="fail-badge">2 fallas</span></div><div class="dtc-stats"><div class="mini-stat"><div class="mini-lbl">Miners</div><div class="mini-val">320</div></div><div class="mini-stat"><div class="mini-lbl">En falla</div><div class="mini-val" style="color:#ef4444">2</div></div><div class="mini-stat"><div class="mini-lbl">Error</div><div class="mini-val" style="color:#f59e0b">1005</div></div></div><div class="dtc-footer"><span class="dtc-layout"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 7h10M7 12h10M7 17h10"/></svg>28 × 12 slots</span><span class="dtc-link">Ver reporte <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></a>
+    <a href="dc5.html" class="dtc-card fail"><div class="dtc-header"><div><div class="dtc-name">DC5</div><div class="dtc-id">69b3008b...0e60</div></div><span class="fail-badge">3 fallas</span></div><div class="dtc-stats"><div class="mini-stat"><div class="mini-lbl">Miners</div><div class="mini-val">320</div></div><div class="mini-stat"><div class="mini-lbl">En falla</div><div class="mini-val" style="color:#ef4444">3</div></div><div class="mini-stat"><div class="mini-lbl">Errores</div><div class="mini-val" style="color:#f59e0b">Multi</div></div></div><div class="dtc-footer"><span class="dtc-layout"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 7h10M7 12h10M7 17h10"/></svg>28 × 12 slots</span><span class="dtc-link">Ver reporte <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></a>
+    <a href="dc6.html" class="dtc-card fail"><div class="dtc-header"><div><div class="dtc-name">DC6</div><div class="dtc-id">69b30102...117b</div></div><span class="fail-badge">4 fallas</span></div><div class="dtc-stats"><div class="mini-stat"><div class="mini-lbl">Miners</div><div class="mini-val">320</div></div><div class="mini-stat"><div class="mini-lbl">En falla</div><div class="mini-val" style="color:#ef4444">4</div></div><div class="mini-stat"><div class="mini-lbl">Errores</div><div class="mini-val" style="color:#f59e0b">Multi</div></div></div><div class="dtc-footer"><span class="dtc-layout"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 7h10M7 12h10M7 17h10"/></svg>28 × 12 slots</span><span class="dtc-link">Ver reporte <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></a>
+    <a href="dc7.html" class="dtc-card fail"><div class="dtc-header"><div><div class="dtc-name">DC7</div><div class="dtc-id">69b31938...28b3</div></div><span class="fail-badge">3 fallas</span></div><div class="dtc-stats"><div class="mini-stat"><div class="mini-lbl">Miners</div><div class="mini-val">320</div></div><div class="mini-stat"><div class="mini-lbl">En falla</div><div class="mini-val" style="color:#ef4444">3</div></div><div class="mini-stat"><div class="mini-lbl">Errores</div><div class="mini-val" style="color:#f59e0b">Multi</div></div></div><div class="dtc-footer"><span class="dtc-layout"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 7h10M7 12h10M7 17h10"/></svg>28 × 12 slots</span><span class="dtc-link">Ver reporte <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></a>
+    <a href="dc8.html" class="dtc-card fail"><div class="dtc-header"><div><div class="dtc-name">DC8</div><div class="dtc-id">69b3211e...333a</div></div><span class="fail-badge">3 fallas</span></div><div class="dtc-stats"><div class="mini-stat"><div class="mini-lbl">Miners</div><div class="mini-val">320</div></div><div class="mini-stat"><div class="mini-lbl">En falla</div><div class="mini-val" style="color:#ef4444">3</div></div><div class="mini-stat"><div class="mini-lbl">Error</div><div class="mini-val" style="color:#f59e0b">1005</div></div></div><div class="dtc-footer"><span class="dtc-layout"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 7h10M7 12h10M7 17h10"/></svg>28 × 12 slots</span><span class="dtc-link">Ver reporte <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></a>
+    <a href="dc9.html" class="dtc-card fail"><div class="dtc-header"><div><div class="dtc-name">DC9</div><div class="dtc-id">69b3805d...c16f</div></div><span class="fail-badge">5 fallas</span></div><div class="dtc-stats"><div class="mini-stat"><div class="mini-lbl">Miners</div><div class="mini-val">288</div></div><div class="mini-stat"><div class="mini-lbl">En falla</div><div class="mini-val" style="color:#ef4444">5</div></div><div class="mini-stat"><div class="mini-lbl">Errores</div><div class="mini-val" style="color:#f59e0b">Multi</div></div></div><div class="dtc-footer"><span class="dtc-layout"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 7h10M7 12h10M7 17h10"/></svg>32 × 9 slots</span><span class="dtc-link">Ver reporte <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></a>
   </div>
 
-  <!-- ERROR TABLE -->
-  <div class="error-table-wrap">
-    <div class="section-title">Resumen de errores â todos los DTCs</div>
+  <div class="error-wrap">
+    <div class="section-title">Resumen de errores</div>
     <table>
-      <thead>
-        <tr>
-          <th>CÃ³digo</th>
-          <th>DescripciÃ³n</th>
-          <th>Cantidad</th>
-          <th>DTCs afectados</th>
-          <th>AcciÃ³n</th>
-        </tr>
-      </thead>
+      <thead><tr><th>Código</th><th>Descripción</th><th>Qty</th><th>DTCs</th><th>Acción</th></tr></thead>
       <tbody>
-        <tr>
-          <td><span class="tag tag-error">1005</span></td>
-          <td>Miner initialization failed â tablero sin respuesta</td>
-          <td><strong>25</strong></td>
-          <td class="mono">DC1, DC2, DC3, DC4, DC5, DC6, DC7, DC8, DC9</td>
-          <td><span class="tag tag-error">Mantenimiento</span></td>
-        </tr>
-        <tr>
-          <td><span class="tag tag-warn">2008</span></td>
-          <td>Over-temperature / PSU fault</td>
-          <td><strong>6</strong></td>
-          <td class="mono">DC3, DC5, DC6, DC9</td>
-          <td><span class="tag tag-warn">InspecciÃ³n</span></td>
-        </tr>
-        <tr>
-          <td><span class="tag tag-warn">1006</span></td>
-          <td>Fan failure â velocidad fuera de rango</td>
-          <td><strong>2</strong></td>
-          <td class="mono">DC2, DC6</td>
-          <td><span class="tag tag-warn">Reemplazo ventilador</span></td>
-        </tr>
-        <tr>
-          <td><span class="tag tag-warn">4002</span></td>
-          <td>PSU power error â falla fuente de poder</td>
-          <td><strong>1</strong></td>
-          <td class="mono">DC7</td>
-          <td><span class="tag tag-error">Reemplazo PSU</span></td>
-        </tr>
-        <tr>
-          <td><span class="tag tag-warn">1002</span></td>
-          <td>Hash board chain error</td>
-          <td><strong>1</strong></td>
-          <td class="mono">DC3</td>
-          <td><span class="tag tag-error">Mantenimiento</span></td>
-        </tr>
-        <tr>
-          <td><span class="tag tag-warn">3003</span></td>
-          <td>Network / API communication error</td>
-          <td><strong>1</strong></td>
-          <td class="mono">DC9</td>
-          <td><span class="tag tag-warn">Verificar red</span></td>
-        </tr>
+        <tr><td><span class="tag tag-e">1005</span></td><td>Miner initialization failed — tablero sin respuesta</td><td><strong>25</strong></td><td class="mono">DC1–DC9</td><td><span class="tag tag-e">Mantenimiento</span></td></tr>
+        <tr><td><span class="tag tag-w">2008</span></td><td>Over-temperature / PSU fault</td><td><strong>6</strong></td><td class="mono">DC3,DC5,DC6,DC9</td><td><span class="tag tag-w">Inspección</span></td></tr>
+        <tr><td><span class="tag tag-w">1006</span></td><td>Fan failure — velocidad fuera de rango</td><td><strong>2</strong></td><td class="mono">DC2,DC6</td><td><span class="tag tag-w">Reemplazo ventilador</span></td></tr>
+        <tr><td><span class="tag tag-w">4002</span></td><td>PSU power error — falla fuente de poder</td><td><strong>1</strong></td><td class="mono">DC7</td><td><span class="tag tag-e">Reemplazo PSU</span></td></tr>
+        <tr><td><span class="tag tag-w">3003</span></td><td>Network / API communication error</td><td><strong>1</strong></td><td class="mono">DC9</td><td><span class="tag tag-w">Verificar red</span></td></tr>
       </tbody>
     </table>
   </div>
-
 </main>
-
-<footer>
-  Exa-Tech Mining Control Â· Bajo del Toro Â· Generado automÃ¡ticamente
-</footer>
-
+<footer>Exa-Tech Mining Control · Industria 4.0 · Bajo del Toro · Generado automáticamente</footer>
 </body>
 </html>
