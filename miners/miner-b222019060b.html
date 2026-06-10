@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha Técnica — DC4-E10-S03 | Exa-Tech</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root{--bg:#0d0f14;--surface:#161b26;--border:#222840;--accent:#00c2ff;--ok:#22c55e;--warn:#f59e0b;--error:#ef4444;--text:#e2e8f0;--muted:#64748b;--font:'Segoe UI',system-ui,sans-serif;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;}
+  header{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;background:var(--surface);border-bottom:1px solid var(--border);}
+  .logo{font-weight:700;font-size:1rem;display:flex;align-items:center;gap:8px;}
+  .logo-dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 7px var(--accent);}
+  .breadcrumb{font-size:.8rem;color:var(--muted);}
+  .breadcrumb a{color:var(--accent);text-decoration:none;}
+  main{padding:28px 24px;max-width:800px;margin:0 auto;}
+  .id-card{background:var(--surface);border:2px solid rgba(239,68,68,.5);border-radius:16px;padding:24px;margin-bottom:24px;}
+  .id-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;margin-bottom:20px;}
+  .miner-id{font-size:1.5rem;font-weight:800;}
+  .miner-mac{font-family:monospace;font-size:.85rem;color:var(--muted);margin-top:2px;}
+  .miner-location{font-size:.8rem;color:var(--muted);margin-top:4px;}
+  .fault-status{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.5);color:var(--error);padding:8px 16px;border-radius:10px;font-weight:700;font-size:.9rem;text-align:center;}
+  .fault-code{font-size:1.4rem;font-weight:900;display:block;}
+  .fault-desc{font-size:.7rem;opacity:.8;}
+  .qr-section{display:flex;align-items:center;gap:20px;background:white;border-radius:12px;padding:16px;flex-wrap:wrap;}
+  .qr-info{flex:1;min-width:180px;}
+  .qr-title{font-size:.85rem;font-weight:700;color:#1e293b;margin-bottom:4px;}
+  .qr-sub{font-size:.75rem;color:#64748b;word-break:break-all;}
+  .qr-tip{font-size:.7rem;color:#94a3b8;margin-top:8px;}
+  .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px;}
+  .detail-section{background:var(--bg);border-radius:10px;padding:16px;}
+  .detail-section.full{grid-column:1/-1;}
+  .detail-title{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+  .kv{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(34,40,64,.4);font-size:.82rem;}
+  .kv:last-child{border-bottom:none;}
+  .kv-key{color:var(--muted);}
+  .kv-val{font-weight:600;}
+  .kv-val.error{color:var(--error);}
+  .kv-val.warn{color:var(--warn);}
+  .kv-val.ok{color:var(--ok);}
+  .kv-val.mono{font-family:monospace;font-size:.78rem;}
+  .boards-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;}
+  .board-card{background:var(--surface);border-radius:8px;padding:12px;text-align:center;border:1px solid var(--border);}
+  .board-card.dead{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.05);}
+  .board-num{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;}
+  .board-temp{font-size:1.2rem;font-weight:700;}
+  .board-status{font-size:.7rem;margin-top:3px;}
+  .board-status.dead-txt{color:var(--error);}
+  .board-status.ok-txt{color:var(--ok);}
+  .timeline{margin-top:12px;}
+  .tl-item{display:flex;gap:12px;padding:8px 0;border-bottom:1px solid rgba(34,40,64,.4);}
+  .tl-item:last-child{border-bottom:none;}
+  .tl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+  .tl-dot.error{background:var(--error);box-shadow:0 0 6px var(--error);}
+  .tl-dot.warn{background:var(--warn);}
+  .tl-dot.info{background:var(--accent);}
+  .tl-date{font-size:.72rem;color:var(--muted);font-family:monospace;}
+  .tl-event{font-size:.82rem;font-weight:500;}
+  .tl-detail{font-size:.75rem;color:var(--muted);margin-top:2px;}
+  .action-box{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.3);border-radius:10px;padding:16px;margin-top:24px;}
+  .action-title{font-size:.9rem;font-weight:700;color:var(--error);margin-bottom:8px;}
+  .action-steps{list-style:none;}
+  .action-steps li{font-size:.82rem;padding:5px 0;border-bottom:1px solid rgba(239,68,68,.1);display:flex;gap:8px;}
+  .action-steps li:last-child{border-bottom:none;}
+  .step-num{color:var(--error);font-weight:700;min-width:18px;}
+  footer{text-align:center;padding:24px;color:var(--muted);font-size:.75rem;border-top:1px solid var(--border);margin-top:36px;}
+  @media(max-width:580px){.detail-grid{grid-template-columns:1fr;}main{padding:16px;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><div class="logo-dot"></div>EXA-TECH</div>
+  <div class="breadcrumb"><a href="../index.html">Inicio</a> / <a href="../dc4.html">DC4</a> / DC4-E10-S03</div>
+</header>
+<main>
+  <div class="id-card">
+    <div class="id-top">
+      <div>
+        <div class="miner-id">DC4 — Estante 10, Slot 3</div>
+        <div class="miner-mac">MAC: b2:22:01:90:60:8b</div>
+        <div class="miner-location">📍 Bajo del Toro · DC4 · IP: 10.4.11.89</div>
+      </div>
+      <div class="fault-status"><span class="fault-code">1005</span><span class="fault-desc">miner initialization failed</span></div>
+    </div>
+    <div class="qr-section">
+      <div id="qrcode"></div>
+      <div class="qr-info">
+        <div class="qr-title">QR — Ficha técnica</div>
+        <div class="qr-sub" id="qrUrl"></div>
+        <div class="qr-tip">Escaneá para abrir desde cualquier dispositivo.</div>
+      </div>
+    </div>
+  </div>
+  <div class="detail-grid">
+    <div class="detail-section">
+      <div class="detail-title">Identificación</div>
+      <div class="kv"><span class="kv-key">MAC</span><span class="kv-val mono">b2:22:01:90:60:8b</span></div>
+      <div class="kv"><span class="kv-key">IP</span><span class="kv-val mono">10.4.11.89</span></div>
+      <div class="kv"><span class="kv-key">Modelo</span><span class="kv-val">S19j Pro+</span></div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-title">Ubicación física</div>
+      <div class="kv"><span class="kv-key">Data Center</span><span class="kv-val">DC4</span></div>
+      <div class="kv"><span class="kv-key">Sitio</span><span class="kv-val">Bajo del Toro</span></div>
+      <div class="kv"><span class="kv-key">Estante (Y)</span><span class="kv-val">10 (Y=9)</span></div>
+      <div class="kv"><span class="kv-key">Slot (X)</span><span class="kv-val">3 (X=2)</span></div>
+      <div class="kv"><span class="kv-key">Puerta fría</span><span class="kv-val">Izquierda</span></div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-title">Estado actual</div>
+      <div class="kv"><span class="kv-key">Estado</span><span class="kv-val error">FAULT</span></div>
+      <div class="kv"><span class="kv-key">Código error</span><span class="kv-val error">1005</span></div>
+      <div class="kv"><span class="kv-key">Descripción</span><span class="kv-val error">Init failed</span></div>
+      <div class="kv"><span class="kv-key">Accesible</span><span class="kv-val ok">Sí (ping OK)</span></div>
+      <div class="kv"><span class="kv-key">Hashrate</span><span class="kv-val error">0 TH/s</span></div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-title">Telemetría</div>
+      <div class="kv"><span class="kv-key">Temp. chip</span><span class="kv-val ok">37°C</span></div>
+      <div class="kv"><span class="kv-key">Preset potencia</span><span class="kv-val">2950 W</span></div>
+      <div class="kv"><span class="kv-key">En falla desde</span><span class="kv-val warn">10/06/26 15:07</span></div>
+      <div class="kv"><span class="kv-key">1ª falla histórica</span><span class="kv-val error">20/04/2026</span></div>
+    </div>
+    <div class="detail-section full">
+      <div class="detail-title">Hash boards</div>
+      <div class="boards-row">
+        <div class="board-card"><div class="board-num">Board 1</div><div class="board-temp" style="color:var(--ok)">22°C</div><div class="board-status ok-txt">Respondiendo</div></div>
+        <div class="board-card dead"><div class="board-num">Board 2</div><div class="board-temp" style="color:var(--error)">—</div><div class="board-status dead-txt">Sin respuesta ✗</div></div>
+        <div class="board-card dead"><div class="board-num">Board 3</div><div class="board-temp" style="color:var(--error)">—</div><div class="board-status dead-txt">Sin respuesta ✗</div></div>
+      </div>
+    </div>
+    <div class="detail-section full">
+      <div class="detail-title">Historial</div>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-dot error"></div><div><div class="tl-date">10/06/2026 15:07</div><div class="tl-event">Estado → FAULT</div><div class="tl-detail">Error 1005 · Boards 2 y 3 sin respuesta</div></div></div>
+        <div class="tl-item"><div class="tl-dot warn"></div><div><div class="tl-date">20/04/2026</div><div class="tl-event">Primera falla registrada</div></div></div>
+        <div class="tl-item"><div class="tl-dot info"></div><div><div class="tl-date">06/03/2026</div><div class="tl-event">DC4 puesto en producción</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="action-box">
+    <div class="action-title">🔧 Acción: MANTENIMIENTO FÍSICO</div>
+    <ul class="action-steps">
+      <li><span class="step-num">1.</span>DC4 · Estante 10 · Slot 3 · Puerta fría izquierda</li>
+      <li><span class="step-num">2.</span>Verificar conexiones Boards 2 y 3</li>
+      <li><span class="step-num">3.</span>Reinicio por IP: 10.4.11.89</li>
+      <li><span class="step-num">4.</span>Extraer e inspeccionar tableros</li>
+      <li><span class="step-num">5.</span>Evaluar reemplazo de hash boards</li>
+    </ul>
+  </div>
+</main>
+<footer>Exa-Tech · DC4 · Bajo del Toro</footer>
+<script>
+  const url=window.location.href;
+  document.getElementById('qrUrl').textContent=url;
+  new QRCode(document.getElementById('qrcode'),{text:url,width:140,height:140,colorDark:'#0d0f14',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+</script>
+</body>
+</html>
