@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha T&eacute;cnica &mdash; DTC4-E13-S11</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root{--bg:#0a0d14;--surface:#111827;--border:#1e2a3a;--accent:#00c2ff;--ok:#22c55e;--warn:#f59e0b;--error:#ef4444;--text:#e2e8f0;--muted:#64748b;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;padding:24px;}
+  header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+  .logo{font-weight:700;font-size:.95rem;display:flex;align-items:center;gap:8px;}
+  .logo-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 7px var(--accent);}
+  .breadcrumb{font-size:.8rem;color:var(--muted);}
+  .breadcrumb a{color:var(--accent);text-decoration:none;}
+  .layout{display:grid;grid-template-columns:1fr 220px;gap:20px;max-width:900px;margin:0 auto;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;}
+  .card.fault{border-color:rgba(239,68,68,.3);border-top:3px solid var(--error);}
+  .card-title{font-size:1.1rem;font-weight:700;margin-bottom:4px;}
+  .card-sub{font-size:.78rem;color:var(--muted);margin-bottom:18px;font-family:monospace;}
+  .badge-fault{display:inline-block;background:rgba(239,68,68,.15);color:var(--error);border:1px solid rgba(239,68,68,.4);border-radius:8px;padding:4px 14px;font-size:.75rem;font-weight:700;margin-bottom:18px;}
+  .section{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:16px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--border);}
+  .kv{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(30,42,58,.6);font-size:.82rem;}
+  .kv:last-child{border-bottom:none;}
+  .kv-k{color:var(--muted);}
+  .kv-v{font-weight:600;}
+  .kv-v.err{color:var(--error);}
+  .kv-v.ok{color:var(--ok);}
+  .kv-v.warn{color:var(--warn);}
+  .kv-v.mono{font-family:monospace;font-size:.78rem;}
+  .boards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;}
+  .board{background:var(--bg);border-radius:8px;padding:10px;text-align:center;border:1px solid var(--border);}
+  .board.dead{border-color:rgba(239,68,68,.4);}
+  .board-n{font-size:.6rem;color:var(--muted);text-transform:uppercase;}
+  .board-t{font-size:1.15rem;font-weight:700;margin:4px 0 2px;}
+  .board-s{font-size:.65rem;}
+  .qr-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;}
+  .qr-card .card-title{text-align:center;font-size:.88rem;}
+  #qrcode{background:#fff;padding:10px;border-radius:8px;}
+  .qr-note{font-size:.68rem;color:var(--muted);text-align:center;line-height:1.5;}
+  footer{text-align:center;padding-top:20px;color:var(--muted);font-size:.7rem;max-width:900px;margin:20px auto 0;}
+  @media(max-width:640px){.layout{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><div class="logo-dot"></div>EXA-TECH</div>
+  <div class="breadcrumb"><a href="../index.html">Inicio</a> / <a href="../dc4.html">DTC4</a> / E13-S11</div>
+</header>
+
+<div class="layout">
+  <div class="card fault">
+    <div class="card-title">Ficha T&eacute;cnica &mdash; DTC4 / Estante 13 / Slot 11</div>
+    <div class="card-sub">02:de:bc:d4:21:c2</div>
+    <div class="badge-fault">&#9888; FAULT 1005 &mdash; Activa</div>
+
+    <div class="section">Identificaci&oacute;n</div>
+    <div class="kv"><span class="kv-k">MAC Address</span><span class="kv-v mono">02:de:bc:d4:21:c2</span></div>
+    <div class="kv"><span class="kv-k">IP</span><span class="kv-v mono">10.4.11.210</span></div>
+    <div class="kv"><span class="kv-k">Modelo</span><span class="kv-v">Antminer S19j Pro+</span></div>
+    <div class="kv"><span class="kv-k">Data Center</span><span class="kv-v">DTC4</span></div>
+    <div class="kv"><span class="kv-k">Ubicaci&oacute;n</span><span class="kv-v">Estante 13, Slot 11</span></div>
+    <div class="kv"><span class="kv-k">Coordenadas (X,Y)</span><span class="kv-v mono">X=10, Y=12</span></div>
+
+    <div class="section">Estado de falla</div>
+    <div class="kv"><span class="kv-k">Estado</span><span class="kv-v err">FAULT</span></div>
+    <div class="kv"><span class="kv-k">C&oacute;digo de error</span><span class="kv-v err">1005</span></div>
+    <div class="kv"><span class="kv-k">Descripci&oacute;n</span><span class="kv-v err">Init failed &mdash; boards 1 y 2 no responden</span></div>
+    <div class="kv"><span class="kv-k">En falla desde</span><span class="kv-v mono">11/06/2026 19:00</span></div>
+
+    <div class="section">T&eacute;rmico y consumo</div>
+    <div class="kv"><span class="kv-k">Temperatura chip</span><span class="kv-v ok">30&deg;C</span></div>
+    <div class="kv"><span class="kv-k">Potencia preset</span><span class="kv-v">2800 W</span></div>
+    <div class="kv"><span class="kv-k">Hashrate efectivo</span><span class="kv-v err">0 TH/s (detenido)</span></div>
+
+    <div class="section">Estado de boards</div>
+    <div class="boards">
+      <div class="board dead">
+        <div class="board-n">Board 1</div>
+        <div class="board-t" style="color:var(--error)">0&deg;C</div>
+        <div class="board-s" style="color:var(--error)">Sin respuesta</div>
+      </div>
+      <div class="board dead">
+        <div class="board-n">Board 2</div>
+        <div class="board-t" style="color:var(--error)">0&deg;C</div>
+        <div class="board-s" style="color:var(--error)">Sin respuesta</div>
+      </div>
+      <div class="board">
+        <div class="board-n">Board 3</div>
+        <div class="board-t" style="color:var(--ok)">15&deg;C</div>
+        <div class="board-s" style="color:var(--ok)">OK</div>
+      </div>
+    </div>
+
+    <div class="section">Recomendaci&oacute;n de reparaci&oacute;n</div>
+    <div class="kv"><span class="kv-k">Boards afectadas</span><span class="kv-v err">Board 1 y Board 2</span></div>
+    <div class="kv"><span class="kv-k">Acci&oacute;n sugerida</span><span class="kv-v">Inspecci&oacute;n f&iacute;sica + reemplazo de boards</span></div>
+    <div class="kv"><span class="kv-k">Prioridad</span><span class="kv-v warn">ALTA &mdash; 2 de 3 boards inactivas</span></div>
+  </div>
+
+  <div class="card qr-card">
+    <div class="card-title">C&oacute;digo QR</div>
+    <div id="qrcode"></div>
+    <div class="qr-note">Escanear para acceder a esta ficha t&eacute;cnica desde dispositivo m&oacute;vil</div>
+    <div class="qr-note" style="font-size:.62rem;margin-top:4px;word-break:break-all;color:var(--border);" id="qrUrl"></div>
+  </div>
+</div>
+
+<footer>Exa-Tech Mining Control &middot; DTC4 / E13-S11 &middot; Bajo del Toro &middot; 2026</footer>
+
+<script>
+  const url = window.location.href;
+  document.getElementById('qrUrl').textContent = url;
+  new QRCode(document.getElementById('qrcode'), {
+    text: url, width: 160, height: 160,
+    colorDark: '#000000', colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.H
+  });
+</script>
+</body>
+</html>
